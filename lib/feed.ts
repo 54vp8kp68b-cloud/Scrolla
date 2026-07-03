@@ -20,6 +20,7 @@ export type FeedItem = {
   topic: { name: string; slug: string } | null;
   hashtags: { name: string; slug: string }[];
   likeCount: number;
+  commentCount: number;
   quiz?: FeedQuiz | null;
   courseId?: string | null;
 };

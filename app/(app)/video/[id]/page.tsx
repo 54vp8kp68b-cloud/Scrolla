@@ -38,6 +38,7 @@ export default async function VideoPage({
          topics:topic_id ( name, slug ),
          video_hashtags ( hashtags ( name, slug ) ),
          likes ( count ),
+         comments ( count ),
          quizzes ( id, question, answer_choices, correct_answer ),
          course_videos ( course_id )`
       )
@@ -108,6 +109,8 @@ export default async function VideoPage({
       .filter((h): h is { name: string; slug: string } => h !== null),
     likeCount:
       (r.likes as unknown as { count: number }[] | null)?.[0]?.count ?? 0,
+    commentCount:
+      (r.comments as unknown as { count: number }[] | null)?.[0]?.count ?? 0,
     quiz: toFeedQuiz(
       (r.quizzes as unknown as {
         id: string;

@@ -24,6 +24,7 @@ type VideoRow = {
   topics: { name: string; slug: string } | null;
   video_hashtags: { hashtags: { name: string; slug: string } | null }[];
   likes: { count: number }[];
+  comments: { count: number }[];
   quizzes: {
     id: string;
     question: string;
@@ -38,6 +39,7 @@ const FEED_SELECT = `id, title, caption, video_url, created_at, topic_id,
   topics:topic_id ( name, slug ),
   video_hashtags ( hashtags ( name, slug ) ),
   likes ( count ),
+  comments ( count ),
   quizzes ( id, question, answer_choices, correct_answer ),
   course_videos ( course_id )`;
 
@@ -146,6 +148,7 @@ export default async function FeedPage({
       .map((vh) => vh.hashtags)
       .filter((h): h is { name: string; slug: string } => h !== null),
     likeCount: r.likes?.[0]?.count ?? 0,
+    commentCount: r.comments?.[0]?.count ?? 0,
     quiz: toFeedQuiz(r.quizzes?.[0] ?? null),
     courseId: r.course_videos?.[0]?.course_id ?? null,
   }));

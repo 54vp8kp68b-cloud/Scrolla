@@ -21,6 +21,7 @@ import {
   Flag,
 } from "lucide-react";
 import ReportModal from "@/components/ReportModal";
+import CommentsSheet from "@/components/CommentsSheet";
 
 type Props = {
   item: FeedItem;
@@ -58,6 +59,8 @@ export default function VideoCard({
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
+  const [commentsOpen, setCommentsOpen] = useState(false);
+  const [commentCount, setCommentCount] = useState(item.commentCount ?? 0);
 
   const isOwn = currentUserId === item.creator.id;
 
@@ -366,9 +369,9 @@ export default function VideoCard({
           />
         )}
         <RailButton
-          onClick={() => {}}
-          label="Soon"
-          icon={<MessageCircle className="w-7 h-7 text-white/50" />}
+          onClick={() => setCommentsOpen(true)}
+          label={formatCount(commentCount)}
+          icon={<MessageCircle className="w-7 h-7 text-white" />}
         />
         <RailButton
           onClick={handleShare}
@@ -394,6 +397,24 @@ export default function VideoCard({
           }
         />
       </div>
+
+      {/* Comments sheet */}
+      {commentsOpen && (
+        <CommentsSheet
+          videoId={item.id}
+          currentUserId={currentUserId}
+          onClose={() => {
+            setCommentsOpen(false);
+            // Refresh count after closing
+            const supabase = createClient();
+            supabase
+              .from("comments")
+              .select("id", { count: "exact", head: true })
+              .eq("video_id", item.id)
+              .then(({ count }) => { if (count !== null) setCommentCount(count); });
+          }}
+        />
+      )}
 
       {/* Report / block overlay */}
       {reportOpen && (
