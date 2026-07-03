@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  height: 100%;
+  background: #050508;
+  color: #f4f4f5;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
+}
+
+/* Hide scrollbars in the feed (TikTok-style) but keep scrollability */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Full-height that respects mobile browser chrome */
+.h-screen-safe {
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* Snap container for the vertical feed (used from Phase 5 on) */
+.feed-snap {
+  scroll-snap-type: y mandatory;
+}
+.feed-snap > * {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
