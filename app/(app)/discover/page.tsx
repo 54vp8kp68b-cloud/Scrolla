@@ -97,7 +97,8 @@ export default function DiscoverPage() {
   return (
     <main className="h-full overflow-y-auto no-scrollbar">
       <div className="mx-auto max-w-lg px-4 pt-10 pb-8">
-        <h1 className="text-xl font-bold">Discover</h1>
+        <h1 className="text-2xl font-bold">Discover</h1>
+        <p className="mt-0.5 text-sm text-zinc-500">Search lessons or browse by topic</p>
 
         {/* Search bar */}
         <div className="mt-4 relative">
@@ -139,28 +140,38 @@ export default function DiscoverPage() {
           </div>
         ) : (
           <div className="mt-6">
-            <h2 className="text-sm font-semibold text-zinc-400 mb-3">
+            <h2 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest mb-3">
               Browse by topic
             </h2>
             <div className="grid grid-cols-2 gap-2.5">
-              {topics.map((t, i) => (
-                <Link
-                  key={t.id}
-                  href={`/feed?topic=${t.slug}`}
-                  className={`p-4 rounded-2xl border border-white/5 font-semibold text-sm hover:border-brand/40 transition-colors ${
-                    i % 3 === 0
-                      ? "bg-gradient-to-br from-brand/25 to-ink-900"
-                      : i % 3 === 1
-                        ? "bg-gradient-to-br from-accent/20 to-ink-900"
-                        : "bg-gradient-to-br from-accent-pink/20 to-ink-900"
-                  }`}
-                >
-                  {t.name}
-                  <span className="block mt-1 text-[11px] font-normal text-zinc-500">
-                    #{t.slug.replace(/-/g, "")}
-                  </span>
-                </Link>
-              ))}
+              {topics.map((t, i) => {
+                const TOPIC_META: Record<string, { emoji: string; from: string; to: string }> = {
+                  "sat-prep":         { emoji: "📚", from: "from-violet-500/30", to: "to-brand/10" },
+                  "math":             { emoji: "🔢", from: "from-blue-500/30",   to: "to-ink-900" },
+                  "coding":           { emoji: "💻", from: "from-green-500/25",  to: "to-ink-900" },
+                  "business":         { emoji: "💼", from: "from-amber-500/25",  to: "to-ink-900" },
+                  "science":          { emoji: "🔬", from: "from-cyan-500/25",   to: "to-ink-900" },
+                  "history":          { emoji: "🏛️", from: "from-orange-500/25", to: "to-ink-900" },
+                  "college-tips":     { emoji: "🎓", from: "from-purple-500/25", to: "to-ink-900" },
+                  "personal-finance": { emoji: "💰", from: "from-yellow-500/25", to: "to-ink-900" },
+                  "language-learning":{ emoji: "🌍", from: "from-teal-500/25",   to: "to-ink-900" },
+                  "fitness-education":{ emoji: "💪", from: "from-red-500/25",    to: "to-ink-900" },
+                };
+                const meta = TOPIC_META[t.slug] ?? { emoji: "⚡", from: "from-brand/25", to: "to-ink-900" };
+                return (
+                  <Link
+                    key={t.id}
+                    href={`/feed?topic=${t.slug}`}
+                    className={`group p-4 rounded-2xl border border-white/8 bg-gradient-to-br ${meta.from} ${meta.to} hover:border-white/20 hover:scale-[1.02] transition-all duration-200`}
+                  >
+                    <span className="text-2xl mb-2 block">{meta.emoji}</span>
+                    <p className="font-semibold text-sm text-white">{t.name}</p>
+                    <p className="mt-0.5 text-[11px] text-zinc-400">
+                      #{t.slug.replace(/-/g, "")}
+                    </p>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         )}

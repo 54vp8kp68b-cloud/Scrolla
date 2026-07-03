@@ -85,8 +85,19 @@ export default function LandingPage() {
         </div>
       </header>
 
+      {/* Social proof bar */}
+      <div className="border-b border-white/5 bg-ink-900/50 backdrop-blur">
+        <div className="mx-auto max-w-6xl px-4 h-10 flex items-center justify-center gap-6 text-[11px] text-zinc-500 font-medium">
+          <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />Free to use</span>
+          <span className="hidden sm:block">·</span>
+          <span className="hidden sm:flex items-center gap-1.5">🎓 SAT · Coding · Finance · Science & more</span>
+          <span>·</span>
+          <span className="flex items-center gap-1.5">⚡ Quiz after every lesson</span>
+        </div>
+      </div>
+
       {/* Hero */}
-      <section className="relative pt-28 pb-16 px-4">
+      <section className="relative pt-24 pb-16 px-4">
         {/* Glow */}
         <div
           aria-hidden
@@ -98,7 +109,7 @@ export default function LandingPage() {
 
         <div className="mx-auto max-w-6xl grid lg:grid-cols-2 gap-12 items-center">
           <div className="text-center lg:text-left animate-fade-up">
-            <p className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-xs font-medium text-zinc-300 mb-6">
+            <p className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-brand/30 bg-brand/10 text-xs font-semibold text-brand-glow mb-6">
               <Flame className="w-3.5 h-3.5 text-accent-pink" />
               The feed that makes you smarter
             </p>
@@ -197,12 +208,16 @@ export default function LandingPage() {
             <span className="text-zinc-500"> None of the brain rot.</span>
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {FEATURES.map((f) => (
+            {FEATURES.map((f, i) => (
               <div
                 key={f.title}
-                className="p-6 rounded-2xl bg-ink-900 border border-white/5 hover:border-brand/30 transition-colors"
+                className="p-6 rounded-2xl bg-ink-900 border border-white/8 hover:border-brand/30 hover:bg-ink-800 transition-all duration-200 group"
               >
-                <span className="inline-grid place-items-center w-10 h-10 rounded-xl bg-brand/15 text-brand-glow mb-4">
+                <span className={`inline-grid place-items-center w-10 h-10 rounded-xl mb-4 ${
+                  i % 3 === 0 ? "bg-brand/15 text-brand-glow" :
+                  i % 3 === 1 ? "bg-accent/15 text-accent" :
+                  "bg-pink-500/15 text-accent-pink"
+                }`}>
                   <f.icon className="w-5 h-5" />
                 </span>
                 <h3 className="font-semibold mb-1.5">{f.title}</h3>
