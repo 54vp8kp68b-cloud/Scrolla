@@ -408,25 +408,34 @@ export default function CourseManager() {
                   ))
                 )}
 
-                <select
-                  value=""
-                  disabled={busy}
-                  onChange={(e) => addVideo(c.id, e.target.value)}
-                  className="w-full h-10 px-3 rounded-xl bg-ink-800 border border-dashed border-white/15 text-sm text-zinc-400 outline-none focus:border-brand/60 transition"
-                >
-                  <option value="" disabled>
-                    + Add a video to this course…
-                  </option>
-                  {myVideos
-                    .filter(
-                      (v) => !courseVideos.some((cv) => cv.video_id === v.id)
-                    )
-                    .map((v) => (
-                      <option key={v.id} value={v.id}>
-                        {v.title}
-                      </option>
-                    ))}
-                </select>
+                <div className="flex gap-2">
+                  <select
+                    value=""
+                    disabled={busy}
+                    onChange={(e) => addVideo(c.id, e.target.value)}
+                    className="flex-1 h-10 px-3 rounded-xl bg-ink-800 border border-dashed border-white/15 text-sm text-zinc-400 outline-none focus:border-brand/60 transition"
+                  >
+                    <option value="" disabled>
+                      Add existing video…
+                    </option>
+                    {myVideos
+                      .filter(
+                        (v) => !courseVideos.some((cv) => cv.video_id === v.id)
+                      )
+                      .map((v) => (
+                        <option key={v.id} value={v.id}>
+                          {v.title}
+                        </option>
+                      ))}
+                  </select>
+                  <button
+                    onClick={() => router.push(`/upload?courseId=${c.id}`)}
+                    title="Upload a new video for this course"
+                    className="h-10 w-10 rounded-xl bg-brand/15 border border-brand/30 text-brand-glow hover:bg-brand/25 transition-colors grid place-items-center shrink-0"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             )}
           </div>

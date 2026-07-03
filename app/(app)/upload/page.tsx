@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useEffect, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import type { Topic } from "@/lib/types";
@@ -25,7 +25,17 @@ function parseHashtags(raw: string): string[] {
 }
 
 export default function UploadPage() {
+  return (
+    <Suspense>
+      <UploadContent />
+    </Suspense>
+  );
+}
+
+function UploadContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const courseId = searchParams.get("courseId");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -168,7 +178,26 @@ export default function UploadPage() {
         }
       }
 
-      // 4) Off to your profile to see it
+      // 4) If launched from course editor, add video to that course
+      if (courseId) {
+        const { data: lastPos } = await supabase
+          .from("course_videos")
+          .select("position")
+          .eq("course_id", courseId)
+          .order("position", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+        await supabase.from("course_videos").insert({
+          course_id: courseId,
+          video_id: video.id,
+          position: (lastPos?.position ?? -1) + 1,
+        });
+        router.push("/creator/courses");
+        router.refresh();
+        return;
+      }
+
+      // 5) Otherwise go to profile
       const { data: profile } = await supabase
         .from("profiles")
         .select("username")
@@ -203,6 +232,11 @@ export default function UploadPage() {
         <p className="mt-1 text-sm text-zinc-500">
           Vertical video, under {MAX_SIZE_MB}MB. MP4, MOV, or WebM.
         </p>
+        {courseId && (
+          <p className="mt-2 text-xs text-brand-glow bg-brand/10 border border-brand/20 rounded-lg px-3 py-2">
+            This video will be added to your course automatically after upload.
+          </p>
+        )}
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           {/* File picker / preview */}
